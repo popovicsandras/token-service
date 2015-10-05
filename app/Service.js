@@ -2,14 +2,14 @@
 
 var http = require('http');
 var express = require('express');
-var SampleAPI = require('./api/SampleAPI');
+var Authentication = require('./middlewares/Authentication');
 var VersionAPI = require('./api/VersionAPI');
 
 var swaggerUiMiddleware = require('swagger-ui-middleware');
 
 function Service(apis) {
     apis = apis || {};
-    this.sampleAPI = apis.sampleAPI ? apis.sampleAPI: new SampleAPI();
+    this.auth = apis.Authentication ? apis.Authentication: new Authentication();
     this.versionAPI  = apis.versionAPI ? apis.versionAPI : new VersionAPI();
 }
 
@@ -17,14 +17,16 @@ Service.prototype = {
 
     start: function(port) {
         var app = express(),
-            sampleAPI = this.sampleAPI,
+            auth = this.auth,
             versionAPI = this.versionAPI;
 
         // /api-doc endpoint
         swaggerUiMiddleware.hostUI(app, {overrides: __dirname + '/../swagger-ui/'});
 
-        app.get('/sample', function(request, response) {
-            sampleAPI.get(request, response);
+        app.use(auth.authenticate);
+
+        app.get('/', function(request, response) {
+            response.send('gotcha');
         });
 
         app.get('/admin/version', function(request, response) {
