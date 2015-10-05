@@ -23,10 +23,10 @@ Service.prototype = {
         // /api-doc endpoint
         swaggerUiMiddleware.hostUI(app, {overrides: __dirname + '/../swagger-ui/'});
 
-        app.use(auth.authenticate);
+        app.use(auth.authenticator);
 
         app.get('/', function(request, response) {
-            response.send('gotcha');
+            response.send('user uuid: ' + request.userUuid);
         });
 
         app.get('/admin/version', function(request, response) {
