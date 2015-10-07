@@ -4,14 +4,14 @@ var http = require('http');
 var express = require('express');
 var Authentication = require('./middlewares/Authentication');
 
-function Service(apis) {
-    apis = apis || {};
-    this.auth = apis.Authentication ? apis.Authentication: new Authentication();
-}
+class Service {
 
-Service.prototype = {
+    constructor(apis) {
+        apis = apis || {};
+        this.auth = apis.Authentication ? apis.Authentication: new Authentication();
+    }
 
-    start: function(port) {
+    start(port) {
         var app = express(),
             auth = this.auth;
 
@@ -28,6 +28,6 @@ Service.prototype = {
 
         return server;
     }
-};
+}
 
 module.exports = Service;

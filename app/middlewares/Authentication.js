@@ -3,13 +3,13 @@
 var url = require('url');
 var CirrusAuthentication = require('../auth/Cirrus');
 
-var Authentication = function(strategy) {
-    this.cirrus = strategy ? strategy : new CirrusAuthentication();
-};
+class Authentication {
 
-Authentication.prototype = {
+    constructor(strategy) {
+        this.cirrus = strategy ? strategy : new CirrusAuthentication();
+    }
 
-    sessionChecker: function(request, response, next) {
+    sessionChecker(request, response, next) {
 
         var goOnAsAuthenticated = authenticated.bind(this, request, next),
             goOnAsUnauthenticated = unAuthenticated.bind(this, next),
@@ -19,7 +19,7 @@ Authentication.prototype = {
             .then(goOnAsAuthenticated)
             .catch(goOnAsUnauthenticated);
     }
-};
+}
 
 module.exports = Authentication;
 

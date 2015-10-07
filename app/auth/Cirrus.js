@@ -2,15 +2,13 @@
 
 var http = require('http');
 
-function CirrusAuthentication() {}
+class CirrusAuthentication {
 
-CirrusAuthentication.prototype = {
-
-    check: function(sessionId) {
+    check(sessionId) {
         return new Promise(this.sendCheckerRequest.bind(this, sessionId));
-    },
+    }
 
-    sendCheckerRequest: function(sessionId, resolve, reject) {
+    sendCheckerRequest(sessionId, resolve, reject) {
 
         var options = {
             host: 'qa.workshare.com',
@@ -21,9 +19,9 @@ CirrusAuthentication.prototype = {
         };
 
         http.request(options, this.onSessionCheck.bind(this, resolve, reject)).end();
-    },
+    }
 
-    onSessionCheck: function(resolve, reject, resp) {
+    onSessionCheck(resolve, reject, resp) {
 
         var userData = '';
 
@@ -43,6 +41,6 @@ CirrusAuthentication.prototype = {
             }
         });
     }
-};
+}
 
 module.exports = CirrusAuthentication;
