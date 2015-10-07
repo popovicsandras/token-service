@@ -4,7 +4,7 @@ var url = require('url');
 var CirrusAuthentication = require('../auth/Cirrus');
 
 var Authentication = function(strategy) {
-    this.strategy = strategy ? strategy : new CirrusAuthentication();
+    this.cirrus = strategy ? strategy : new CirrusAuthentication();
 };
 
 Authentication.prototype = {
@@ -15,7 +15,7 @@ Authentication.prototype = {
             goOnAsUnauthenticated = unAuthenticated.bind(this, next),
             sessionId = getSessionId(request.url);
 
-        this.strategy.check(sessionId)
+        this.cirrus.check(sessionId)
             .then(goOnAsAuthenticated)
             .catch(goOnAsUnauthenticated);
     }
@@ -30,8 +30,8 @@ function getSessionId(urlString) {
     return query.sessionid;
 }
 
-function authenticated(request, next, UserUuid) {
-    request.userUuid = UserUuid;
+function authenticated(request, next, userUuid) {
+    request.userUuid = userUuid;
     next();
 }
 
